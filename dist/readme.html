@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>readme</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <a href="blogs.html">← Back to all blogs</a>
+      
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"
+      />
+      <hr>
+<h2>title: &quot;About AOPI — How It Started &amp; Where It&#39;s Going&quot;
+date: &quot;2025-11-05&quot;
+description: &quot;A short story about AOPI — what it is, why it exists, and the next steps.&quot;
+tags:
+  - about
+  - story
+  - aopi</h2>
+<!--
+  Notes:
+  - This file is a full blog post template.
+  - You can include raw HTML (for fine-grained image/layout control).
+  - Replace image paths like /public/images/hero.jpg with your actual paths.
+-->
+
+<!-- HERO: big image + title (uses HTML for responsive control) -->
+<figure style="margin:0 0 1.5rem 0; text-align:center;">
+  <img src="/images/apple-touch-icon.png" alt="AOPI hero" style="max-width:100%; height:auto; border-radius:8px;">
+  <figcaption style="font-size:0.9rem; color:#666; margin-top:0.5rem;">AOPI — built with Markdown + Node.js</figcaption>
+</figure>
+
+<h1>About AOPI</h1>
+<p><em>A short intro:</em> AOPI started as a small experiment — a way to write notes in Markdown and instantly publish them to static HTML. Over time it grew into a mini-ecosystem: posts, images, tutorials, and small experiments.</p>
+<hr>
+<h2>Table of contents</h2>
+<ol>
+<li><a href="#why-aopi">Why AOPI?</a></li>
+<li><a href="#how-it-works-quick-tech">How it works (quick tech)</a></li>
+<li><a href="#add-images--media">Add images &amp; media</a></li>
+<li><a href="#examples-and-code-snippets">Examples and code snippets</a></li>
+<li><a href="#related-posts">Related posts</a></li>
+<li><a href="#final-notes">Final notes</a></li>
+</ol>
+<hr>
+<h2>Why AOPI?</h2>
+<p>AOPI exists because writing should be simple. Create a <code>.md</code> file, drop images in <code>public/images/</code>, and the build script compiles everything into <code>dist/</code> as beautiful, shareable HTML. No heavy frameworks, just Markdown + Node.</p>
+<blockquote>
+<p>“Write once, publish everywhere.” — <em>AOPI philosophy</em></p>
+</blockquote>
+<hr>
+<h2>How it works (quick tech)</h2>
+<ul>
+<li>Store posts in <code>markdown/</code> as <code>.md</code> files.</li>
+<li>Images live in <code>public/images/</code> (or <code>markdown/images/</code> — adjust build script).</li>
+<li>Run <code>node build.js</code> (or <code>pnpm run dev</code>) to generate <code>dist/</code> with HTML pages.</li>
+<li>Each post becomes <code>dist/&lt;post-name&gt;.html</code>. Link them from <code>dist/blogs.html</code>.</li>
+</ul>
+<p><strong>Sample post filename:</strong> <code>aboutaopi.md</code> → <code>/aboutaopi.html</code></p>
+<hr>
+<h2>Add images &amp; media</h2>
+<p>You can reference images using standard Markdown:</p>
+<pre><code class="language-md">![Alt text](/images/apple-touch-icon.png)
+</code></pre>
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script>
+      
+    </div>
+  </body>
+</html>
