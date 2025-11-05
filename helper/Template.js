@@ -8,8 +8,16 @@ export function Template(blogLinks) {
    <link rel="stylesheet" href="./dist/style.css" />
   </head>
   <body>
-    <h1>All Blogs</h1>
-    <ul>${blogLinks}</ul>
+   <nav>
+      <p>mterczynski's blog</p>
+      <p>About us</p>
+    </nav>
+ <section>
+      <h1>Posts</h1>
+      <ul>
+        ${blogLinks}
+      </ul>
+    </section>
   </body>
 </html>
 `;

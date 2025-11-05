@@ -3,6 +3,7 @@ import path from "path";
 import { marked } from "marked";
 import hljs from "highlight.js";
 import { Template } from "./helper/Template.js";
+import { format } from "date-fns";
 const __dirname = path.resolve();
 
 // Configure marked for syntax highlighting will highlight js markdown
@@ -48,11 +49,15 @@ const files = fs.readdirSync(markdownDir).filter((f) => f.endsWith(".md"));
 let blogLinks = "";
 
 files.forEach((file) => {
+  const markdownPath = path.join(markdownDir, file);
   const markdown = fs.readFileSync(path.join(markdownDir, file), "utf-8");
   const htmlContent = marked(markdown);
   const title = file.replace(".md", "");
 
-  // Add highlight.js CSS link into layout
+  // Add highlight.js CSS link into layout  // Get last modified date
+  const stats = fs.statSync(markdownPath);
+  const publishedDate = format(stats.mtime, "d MMM yyyy");
+
   const finalHTML = layout.replace("{{title}}", title).replace(
     "{{content}}",
     `
@@ -67,7 +72,15 @@ files.forEach((file) => {
   );
 
   fs.writeFileSync(path.join(distDir, `${title}.html`), finalHTML);
-  blogLinks += `<li><a href="./dist/${title}.html"  target="_blank" rel="noopener noreferrer">${title}</a></li>`;
+  blogLinks += `
+    <li>
+     <p class="date"> ${publishedDate}</p>
+      <a href="./dist/${title}.html" target="_blank" rel="noopener noreferrer">
+        ${title}
+      </a>
+     
+    </li>
+  `;
 });
 const rootIndexPath = path.join(__dirname, "index.html");
 //check if root  index.html exist
@@ -77,5 +90,5 @@ if (!fs.existsSync(rootIndexPath)) {
 } else {
   console.log(" index.html already exists — skipped creation.");
 }
-// fs.writeFileSync(rootIndexPath, Template(blogLinks));
+fs.writeFileSync(rootIndexPath, Template(blogLinks));
 console.log("Markdown compiled successfully with syntax highlighting!");

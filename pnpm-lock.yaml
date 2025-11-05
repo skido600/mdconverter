@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      date-fns:
+        specifier: ^4.1.0
+        version: 4.1.0
       highlight.js:
         specifier: ^11.11.1
         version: 11.11.1
@@ -22,6 +25,9 @@ packages:
 
   abbrev@1.1.1:
     resolution: {integrity: sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==}
+
+  date-fns@4.1.0:
+    resolution: {integrity: sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==}
 
   highlight.js@11.11.1:
     resolution: {integrity: sha512-Xwwo44whKBVCYoliBQwaPvtd/2tYFkRQtXDWj1nackaV2JPXx3L0+Jvd8/qCJ2p+ML0/XVkJ2q+Mr+UVdpJK5w==}
@@ -50,6 +56,8 @@ packages:
 snapshots:
 
   abbrev@1.1.1: {}
+
+  date-fns@4.1.0: {}
 
   highlight.js@11.11.1: {}
 

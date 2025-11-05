@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>2024-07-01-building-tic-tac-toe-javascript</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <a href="../index.html">← Back to all blogs</a>
+      
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"
+      />
+      <hr>
+<h2>layout: post
+title: &quot;How to create a simple Tic Tac Toe game using HTML, CSS, and JavaScript&quot;
+date: 2024-09-08 10:34:02 +0100
+categories: gamedev javascript html css tutorial</h2>
+<h2>Table of Contents</h2>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#html-setup-emmet">HTML Setup, Emmet</a></li>
+<li><a href="#styling-the-board-with-css">Styling the board with CSS</a></li>
+<li><a href="#adding-interactivity">Adding interactivity</a></li>
+<li><a href="#handling-wins">Handling wins</a></li>
+<li><a href="#adding-a-reset-button">Adding a reset button</a></li>
+<li><a href="#links-to-playable-game-and-repository">Links to playable game and repository</a></li>
+</ul>
+<h3>Introduction</h3>
+<p>Tic Tac Toe is an excellent project for beginners in game development. Its simplicity makes it approachable, yet it encompasses key fundamental concepts essential for developing more complex games.</p>
+<h3>HTML Setup, Emmet</h3>
+<p>Let&#39;s start with creating a basic HTML file.</p>
+<pre><code class="language-html">&lt;!-- index.html --&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+  &lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot; /&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; /&gt;
+    &lt;title&gt;Tic tac toe&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>This is the default <a href="https://emmet.io/">Emmet</a> template, updated with the title of our game. Emmet is a useful HTML helper for creating complex code blocks quickly.
+It&#39;s available by default in VS Code and we will use it to generate the HTML for the 3x3 board.</p>
+<p>To create the board using Emmet, we&#39;ll type this in the <code>&lt;body&gt;</code>:</p>
+<p><code>div.board&gt;div.row*3&gt;div.tile*3</code></p>
+<p>and press the Tab key. It will generate this HTML:</p>
+<pre><code class="language-html">&lt;body&gt;
+  &lt;div class=&quot;board&quot;&gt;
+    &lt;div class=&quot;row&quot;&gt;
+      &lt;div class=&quot;tile&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;tile&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;tile&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;row&quot;&gt;
+      &lt;div class=&quot;tile&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;tile&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;tile&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;row&quot;&gt;
+      &lt;div class=&quot;tile&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;tile&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;tile&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+</code></pre>
+<p>It&#39;s a 3x3 board with 3 rows and 3 tiles in each row with proper CSS classes. Quite convenient, isn&#39;t it?
+For games with larger boards we would typically create the board programatically to save lines of code and make the code easier to check, but for 3x3 boards, defining each cell in HTML is totally fine.</p>
+<p>If we open the HTML file in the browser, we won&#39;t see anything. This is because we haven&#39;t defined the grid lines and shape of the tiles. Let&#39;s add some CSS in <code>&lt;head&gt;</code>:</p>
+<h3>Styling the board with CSS</h3>
+<pre><code class="language-html">&lt;style&gt;
+  .tile {
+    height: 200px;
+    width: 200px;
+    border: 1px solid black;
+  }
+&lt;/style&gt;
+</code></pre>
+<img width=110 height=398 src="/blog/assets/tic-tac-toe/board-column.png"/>
+
+<p>We now have square tiles with black borders but all 9 of them are in one column. Let&#39;s fix that with <a href="https://css-tricks.com/snippets/css/a-guide-to-flexbox/">flexbox</a>.</p>
+<pre><code class="language-html">&lt;style&gt;
+  .row {
+    display: flex;
+  }
+
+  .tile {
+    height: 200px;
+    width: 200px;
+    border: 1px solid black;
+  }
+&lt;/style&gt;
+</code></pre>
+<p>By default, divs have <code>display</code> property set to <code>block</code>, which causes their children with <code>display: block</code> to be rendered one under another.
+Flex layouts order their children horizontally by default (due to the fact that <code>justify-content</code> has a default value of <code>row</code>).</p>
+<img width=300 src="/blog/assets/tic-tac-toe/Board.png"/>
+
+<p>Something still seems odd. The borders inside the grid are thicker than the outside ones. This happens because both side and center cells have a 1px border on every side which together combine into 2px wide lines. Let&#39;s make sure that there is maximum one line per column and row.</p>
+<pre><code class="language-html">&lt;style&gt;
+  .row {
+    display: flex;
+  }
+
+  .tile {
+    height: 200px;
+    width: 200px;
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+  }
+&lt;/style&gt;
+</code></pre>
+<!-- <img width=300 src="/blog/assets/tic-tac-toe/board-border-right.png"/> -->
+<img width=300 src="/blog/assets/tic-tac-toe/board-left-right.png"/>
+
+<p>There are no duplicate lines now, but the top line and right lines are now gone. We can fix this by adding 2 borders on the board element.</p>
+<pre><code class="language-css">.board {
+  border-top: 1px solid black;
+  border-right: 1px solid black;
+}
+</code></pre>
+<img width=400 src="/blog/assets/tic-tac-toe/board-3.png"/>
+
+<p>We have all the borders but the top line and right lines aren&#39;t positioned correctly. This happens because the board takes the maximum available width. We can fix this by limiting width of the board to its content width by adding <code>width: max-content</code> to board styles.</p>
+<pre><code class="language-css">.board {
+  border-top: 1px solid black;
+  border-right: 1px solid black;
+  width: max-content;
+}
+</code></pre>
+<img width=340 src="/blog/assets/tic-tac-toe/board-4.png"/>
+
+<p>The board is now displayed correctly.</p>
+<p><strong>Bonus task</strong></p>
+<p>There is at least one different way of styling the borders that results in the same UI. Can you find it?</p>
+<h3>Adding interactivity</h3>
+<p>We want the game to be interactive with the player through mouse clicks. Let&#39;s add a <code>script</code> tag inside <code>head</code> with click listeners attached to the tiles.</p>
+<pre><code class="language-html">&lt;script&gt;
+  const tiles = document.querySelectorAll(&quot;.tile&quot;);
+
+  tiles.forEach((tile) =&gt; {
+    tile.addEventListener(&quot;click&quot;, () =&gt; {
+      tile.innerHTML = &quot;X&quot;;
+    });
+  });
+&lt;/script&gt;
+</code></pre>
+<p>Nothing happens when the tiles are clicked...<br/>
+Let&#39;s log them to see why.</p>
+<pre><code class="language-html">&lt;script&gt;
+  const tiles = document.querySelectorAll(&quot;.tile&quot;);
+
+  console.log(&quot;tiles&quot;, tiles);
+  tiles.forEach((tile) =&gt; {
+    tile.addEventListener(&quot;click&quot;, () =&gt; {
+      tile.innerHTML = &quot;X&quot;;
+    });
+  });
+&lt;/script&gt;
+</code></pre>
+<p>If we open up the console we can see an empty NodeList:</p>
+<img src="/blog/assets/tic-tac-toe/tiles.png"/>
+
+<p>This happens because at the moment of executing our JavaScript code, the HTML code inside <code>&lt;body&gt;</code> hasn&#39;t executed yet.
+We can solve the issue by moving the script tag at the end of the <code>&lt;body&gt;</code>.</p>
+<pre><code class="language-html">  &lt;script&gt;
+    const tiles = document.querySelectorAll(&quot;.tile&quot;);
+
+    console.log(&quot;tiles&quot;, tiles);
+    tiles.forEach((tile) =&gt; {
+      tile.addEventListener(&quot;click&quot;, () =&gt; {
+        tile.innerHTML = &quot;X&quot;;
+      });
+    });
+  &lt;/script&gt;
+&lt;/body&gt;
+</code></pre>
+<p>A small X appears in the tiles after clicking on them. We can also see that the <code>NodeList</code> contains 9 elements when we open the console.</p>
+<img src="/blog/assets/tic-tac-toe/tiles-correct.png"/>
+
+<p><strong>Alternative solution</strong></p>
+<p>Instead of placing the <code>script</code> tag at the end of the <code>body</code>, we can use <code>DOMContentLoaded</code> event listener to wait for the DOM to fully load before executing the script.</p>
+<h3>Back to CSS</h3>
+<p>We&#39;ve added a tiny bit of interactivity, but the &quot;X&quot; looks unreadable. Let&#39;s fix that by updating the font styles.</p>
+<pre><code class="language-css">.tile {
+  height: 200px;
+  width: 200px;
+  border-left: 1px solid black;
+  border-bottom: 1px solid black;
+
+  font-family: &quot;Franklin Gothic Medium&quot;, &quot;Arial Narrow&quot;, Arial, sans-serif;
+  font-size: 100px;
+  text-align: center;
+  line-height: 200px;
+  user-select: none;
+  cursor: pointer;
+}
+</code></pre>
+<p>The X symbols are now readable and centered. We&#39;ve also added <code>user-select: none</code> which prevents users from selecting the text and <code>cursor: pointer</code> which adds a nice cursor that encourages users to click the tiles.</p>
+<img width="320" src="/blog/assets/tic-tac-toe/board-x-cursor-pointer.png" />
+
+<h3>Back to JavaScript</h3>
+<p>Now that we can add &#39;X&#39; symbols, let&#39;s make sure that we can add &#39;O&#39; too to allow for a play between 2 players.
+To do that we can create a <code>currentPlayer</code> variable with 2 available values: <code>&#39;X&#39;</code> and <code>&#39;O&#39;</code>, but it is not type safe (a mistake can be easily made - one might type <code>&#39;x&#39;</code> accidentally). We can improve the type safety by creating an object with all the possible values (or an enum if one is using TypeScript).</p>
+<pre><code class="language-html">&lt;script&gt;
+  // Object.freeze is optional but it will ensure that the `players` object is read-only
+  const players = Object.freeze({
+    x: &quot;X&quot;,
+    o: &quot;O&quot;,
+  });
+  let currentPlayer = players.x;
+  const tiles = document.querySelectorAll(&quot;.tile&quot;);
+
+  tiles.forEach((tile) =&gt; {
+    tile.addEventListener(&quot;click&quot;, () =&gt; {
+      if (tile.innerHTML === players.x || tile.innerHTML === players.o) {
+        return;
+      }
+
+      tile.innerHTML = currentPlayer;
+      currentPlayer = currentPlayer === players.x ? players.o : players.x;
+    });
+  });
+&lt;/script&gt;
+</code></pre>
+<p>We&#39;ve also added a check that will prevent the player from making a move on a filled tile.</p>
+<p><strong>Alternative approach</strong></p>
+<p>Instead of relying on string values, we can create a boolean variable named <code>currentPlayerX</code> with starting value <code>true</code> that changes to <code>false</code> after the first move is made. The code could look like this:</p>
+<pre><code class="language-javascript">let currentPlayerX = true;
+const tiles = document.querySelectorAll(&quot;.tile&quot;);
+
+tiles.forEach((tile) =&gt; {
+  tile.addEventListener(&quot;click&quot;, () =&gt; {
+    if (tile.innerHTML === &quot;X&quot; || tile.innerHTML === &quot;O&quot;) {
+      return;
+    }
+
+    tile.innerHTML = currentPlayerX ? &quot;X&quot; : &quot;O&quot;;
+    currentPlayerX = !currentPlayerX;
+  });
+});
+</code></pre>
+<p>One problem with this approach is that we&#39;re still using <code>&quot;X&quot;</code> and <code>&quot;O&quot;</code> strings to check if tiles are busy. Another problem might come when we&#39;ll be trying to define a variable for the final game result (2 player wins, 1 draw) - we may need to refer to <code>&quot;X&quot;</code> and <code>&quot;O&quot;</code> in our code.
+If we decide to use the players object, we can avoid such problems in the future.</p>
+<h3>Handling wins</h3>
+<p>Now let&#39;s solve the core problem of the game - determining wins.
+To solve this, we&#39;ll need to find a way to check for 3 identical symbols in one row, column or diagonal.
+There are a few ways to tackle this - let&#39;s explore some options.</p>
+<p><strong>Method 1: Defining winning lines using indices</strong></p>
+<p>If we assign an index to each tile, we can define the winning lines using these indices.</p>
+  <img width="315" src="/blog/assets/tic-tac-toe/board-indexed.png" />
+
+<p>The first row consists of tiles indexed by 0, 1, 2. The second row of tiles 3, 4 and 5. The last row is therefore [6, 7, 8] (<span style="color: blue;">blue lines</span>)<br> Columns consists of tiles: [0, 3, 6], [1, 4, 7], [2, 5, 8] (<span style="color: red;">red lines</span>)<br> Diagonals can be defined by tiles: [0, 4, 8], [2, 4, 6] (<span style="color: green;">green lines</span>)</p>
+  <img width="320" src="/blog/assets/tic-tac-toe/board-highlighted-lines.png" />
+
+<p>We can now use these indices in our code:</p>
+<pre><code class="language-javascript">const board = Array.from(document.querySelectorAll(&quot;.tile&quot;));
+const rows = [
+  [0, 1, 2],
+  [3, 4, 5],
+  [6, 7, 8],
+];
+const columns = [
+  [0, 3, 6],
+  [1, 4, 7],
+  [2, 5, 8],
+];
+const diagonals = [
+  [0, 4, 8],
+  [2, 4, 6],
+];
+const winningLines = [...rows, ...columns, ...diagonals].map((line) =&gt;
+  line.map((index) =&gt; board[index])
+);
+</code></pre>
+<p>We&#39;ve used the spread syntax to help ourselves with joining multiple arrays into a single one.</p>
+<p>This approach doesn&#39;t scale very well with board size, so another approach is to use for loops combined with two dimensional board representation.</p>
+<p><strong>Method 2: Using for loops to iteratively create winning lines</strong></p>
+<pre><code class="language-javascript">const board = Array.from(document.querySelectorAll(&quot;.row&quot;)).map((row) =&gt;
+  Array.from(row.children)
+);
+
+const boardSize = 3;
+const rows = [];
+for (let rowIndex = 0; rowIndex &lt; boardSize; rowIndex++) {
+  let row = [];
+  for (let columnIndex = 0; columnIndex &lt; boardSize; columnIndex++) {
+    row.push(board[rowIndex][columnIndex]);
+  }
+  rows.push(row);
+}
+
+const columns = [];
+for (let columnIndex = 0; columnIndex &lt; boardSize; columnIndex++) {
+  let column = [];
+  for (let rowIndex = 0; rowIndex &lt; boardSize; rowIndex++) {
+    column.push(board[rowIndex][columnIndex]);
+  }
+  columns.push(column);
+}
+
+const leftDiagonal = [];
+const rightDiagonal = [];
+for (let rowIndex = 0; rowIndex &lt; boardSize; rowIndex++) {
+  leftDiagonal.push(board[rowIndex][rowIndex]);
+  rightDiagonal.push(board[boardSize - 1 - rowIndex][boardSize - 1 - rowIndex]);
+}
+
+const winningLines = [...rows, ...columns, leftDiagonal, rightDiagonal];
+</code></pre>
+<p>The above method is more complex but it scales nicely with the board size.
+In our game, we&#39;ll use the first approach for its simplicity. Let&#39;s create a function called <code>checkGameOver</code>:</p>
+<pre><code class="language-javascript">function checkGameOver() {
+  const board = Array.from(document.querySelectorAll(&quot;.tile&quot;));
+  let winner = null;
+  let isGameOver = false;
+
+  const rows = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+  ];
+  const columns = [
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+  ];
+  const diagonals = [
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+  const winningLines = [...rows, ...columns, ...diagonals].map((line) =&gt;
+    line.map((index) =&gt; board[index])
+  );
+
+  const stringifiedLines = winningLines.map((line) =&gt;
+    line.map((tile) =&gt; tile.innerHTML).join(&quot;&quot;)
+  );
+
+  for (const line of stringifiedLines) {
+    if (line === &quot;XXX&quot;) {
+      winner = players.x;
+      break;
+    }
+    if (line === &quot;OOO&quot;) {
+      winner = players.o;
+      break;
+    }
+  }
+
+  const isGameDrawn = winner === null &amp;&amp; isBoardFull(board);
+  isGameOver = winner !== null || isGameDrawn;
+
+  return { isGameOver, winner, isGameDrawn };
+}
+</code></pre>
+<p>This should be all we need to check all the possible winning lines. We&#39;ve also included a call to a nonexistent function <code>isBoardFull</code> that we&#39;ll implement in the next step. The <code>isGameOver</code> and <code>winner</code> properties is all the information we need to determine whether the game was won and by who, or if it ended in a draw, but we&#39;ve also included <code>isGameDrawn</code> property in the returned object for ease of use.</p>
+<p>Let&#39;s implement the <code>isBoardFull</code> function.</p>
+<pre><code class="language-javascript">function isBoardFull(board) {
+  return board.every((tile) =&gt; [players.x, players.o].includes(tile.innerHTML));
+}
+</code></pre>
+<p>Our code with <code>includes</code> is a nice, shorter alternative to <code>tile.innerHTML === players.x || tile.innerHTML === players.o</code>.
+We&#39;ll now add 2 simple alerts to notify the players about the game outcome and test our code. We&#39;ll also need to connect <code>checkGameOver</code> to the tile click listeners. Let&#39;s update our existing code of tile click listeners:</p>
+<pre><code class="language-javascript">tile.addEventListener(&quot;click&quot;, () =&gt; {
+  if (tile.innerHTML === players.x || tile.innerHTML === players.o) {
+    return;
+  }
+
+  tile.innerHTML = currentPlayer;
+  currentPlayer = currentPlayer === players.x ? players.o : players.x;
+
+  // check game state after making a move:
+  const { isGameOver, winner, isGameDrawn } = checkGameOver();
+
+  if (winner) {
+    alert(`Game won by ${winner}`);
+  } else if (isGameDrawn) {
+    alert(`Game drawn`);
+  }
+});
+</code></pre>
+<p>Now both players can make a move, and are shown a simple alert after making the final move.
+There is a bug to fix though - empty tiles are interactive even after the game is finished. Let&#39;s fix that by extending the first <a href="https://en.wikipedia.org/wiki/Guard_(computer_science)">guard statement</a>.</p>
+<pre><code class="language-javascript">tile.addEventListener(&quot;click&quot;, () =&gt; {
+  if (
+    tile.innerHTML === players.x ||
+    tile.innerHTML === players.o ||
+    checkGameOver().isGameOver
+  ) {
+    return;
+  }
+  // ...
+</code></pre>
+<p>We&#39;ve added one more check that checks a new <code>gameOver</code> boolean value. Notice that we&#39;re now calling <code>checkGameOver</code> in <code>addEventListener</code>&#39;s callback twice. This is due to the fact that <code>checkGameOver</code> will return different values before and after the move. Alternatively, we can solve this problem by calling <code>checkGameOver</code> only once after making a move and storing the result in a global variable.
+The bug has been fixed, let&#39;s now add a reset button below the board to allow the players to start a new game.</p>
+<h3>Adding a reset button</h3>
+<p>We&#39;ll add a button below the board:</p>
+<pre><code class="language-html">&lt;button id=&quot;resetButton&quot; class=&quot;resetButton&quot;&gt;Reset&lt;/button&gt;
+</code></pre>
+<p>Style it:</p>
+<pre><code class="language-css">.resetButton {
+  font-size: 24px;
+  margin-top: 10px;
+}
+</code></pre>
+<p>And attach a listener to it in our script:</p>
+<pre><code class="language-javascript">document.querySelector(&quot;#resetButton&quot;).addEventListener(&quot;click&quot;, () =&gt; {
+  currentPlayer = players.x;
+  tiles.forEach((tile) =&gt; {
+    tile.innerHTML = &quot;&quot;;
+  });
+});
+</code></pre>
+<p>The button resets the <code>currentPlayer</code> variable and iterates over the tiles to clear every one of them.<br>We now have a working button that resets the game to the initial state. This is the final functionality of the game that we have implemented in this tutorial. There are more things that can be implemented to the game, some ideas include:</p>
+<ul>
+<li>using custom graphics for X and O</li>
+<li>adding support for mobile devices by making the design more responsive</li>
+<li>highlighting the winning lines after the game is won</li>
+<li>replacing browser&#39;s alerts with custom messages</li>
+<li>allowing the players to choose a different board size</li>
+<li>adding a single player mode where one player plays versus a bot</li>
+</ul>
+<h3>Links to playable game and repository</h3>
+<p>Final code of the game can be found <a href="https://github.com/mterczynski/tic-tac-toe">here</a>. Each step in the tutorial is represented by a single commit in the <a href="https://github.com/mterczynski/tic-tac-toe/commits/main/">repository</a>.
+The game can be played <a href="https://www.mter.pl/tic-tac-toe">here</a>.</p>
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script>
+      
+    </div>
+  </body>
+</html>

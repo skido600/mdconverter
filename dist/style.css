@@ -1,14 +1,19 @@
-@import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap");
 * {
   padding: 0;
   margin: 0;
+  box-sizing: border-box;
 }
+ul {
+  list-style-type: none;
+}
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap");
+
 body {
   font-family: "Geist", sans-serif;
-  margin: 2rem;
-  background: #f8f9fa;
-  color: #333;
-  line-height: 1.6;
+
+  /* background: #f8f9fa; */
+  /* color: #333; */
+  /* line-height: 1.6; */
 }
 
 .container {
@@ -23,4 +28,33 @@ a {
 
 a:hover {
   text-decoration: underline;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  border-bottom: 1px solid gray;
+  width: 100%;
+  box-sizing: border-box;
+}
+nav p:nth-of-type(2) {
+  font-size: large;
+  padding: 6px 0;
+}
+
+section {
+  margin: 0; /* no margin on small screens */
+}
+
+/* md: and above (e.g., 768px and up) */
+@media (min-width: 768px) {
+  section {
+    max-width: 1200px;
+  }
+}
+
+.date {
+  font-size: 13px;
+  color: gray;
 }
