@@ -70,11 +70,12 @@ files.forEach((file) => {
   blogLinks += `<li><a href="${title}.html">${title}</a></li>`;
 });
 const rootIndexPath = path.join(__dirname, "index.html");
+//check if root  index.html exist
 if (!fs.existsSync(rootIndexPath)) {
   fs.writeFileSync(rootIndexPath, Template(blogLinks));
-  console.log("✅ index.html created at project root.");
+  console.log("index.html created at project root.");
 } else {
-  console.log("⚠️ index.html already exists — skipped creation.");
+  console.log(" index.html already exists — skipped creation.");
 }
 fs.writeFileSync(rootIndexPath, Template(blogLinks));
 console.log("Markdown compiled successfully with syntax highlighting!");
