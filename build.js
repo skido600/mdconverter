@@ -77,5 +77,5 @@ if (!fs.existsSync(rootIndexPath)) {
 } else {
   console.log(" index.html already exists — skipped creation.");
 }
-fs.writeFileSync(rootIndexPath, Template(blogLinks));
+// fs.writeFileSync(rootIndexPath, Template(blogLinks));
 console.log("Markdown compiled successfully with syntax highlighting!");
