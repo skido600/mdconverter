@@ -67,7 +67,7 @@ files.forEach((file) => {
   );
 
   fs.writeFileSync(path.join(distDir, `${title}.html`), finalHTML);
-  blogLinks += `<li><a href="${title}.html">${title}</a></li>`;
+  blogLinks += `<li><a href="dist/${title}.html">${title}</a></li>`;
 });
 const rootIndexPath = path.join(__dirname, "index.html");
 //check if root  index.html exist
