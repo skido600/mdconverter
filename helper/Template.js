@@ -5,7 +5,7 @@ export function Template(blogLinks) {
   <head>
     <meta charset="UTF-8">
     <title>All Blogs</title>
-    <link rel="stylesheet" href="style.css" />
+   <link rel="stylesheet" href="./dist/style.css" />
   </head>
   <body>
     <h1>All Blogs</h1>

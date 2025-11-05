@@ -1,9 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap");
 * {
   padding: 0;
   margin: 0;
 }
 body {
-  font-family: system-ui, sans-serif;
+  font-family: "Geist", sans-serif;
   margin: 2rem;
   background: #f8f9fa;
   color: #333;
